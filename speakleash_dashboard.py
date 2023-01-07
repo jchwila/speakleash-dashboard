@@ -182,7 +182,7 @@ with line1_1:
 
 
 with line1_2:
-    sl.dat
+    
     if 'selected' in st.session_state:
 
         counter = 0
