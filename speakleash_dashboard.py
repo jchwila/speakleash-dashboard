@@ -1,5 +1,6 @@
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 from pandas import json_normalize
 from streamlit_extras.add_vertical_space import add_vertical_space
@@ -26,6 +27,7 @@ avg_text_dynamics = []
 avg_nouns_to_verbs = []
 
 total_size_mb = 0
+
 for d in sl.datasets:
     size_mb = round(d.characters/1024/1024)
     datasets.append("Dataset: {0}, size: {1} MB, characters: {2}, documents: {3}".format(d.name, size_mb, d.characters, d.documents))
@@ -104,7 +106,20 @@ row0_2.subheader(
 
 
 
-
+fig1_1 = go.Figure(go.Indicator(
+    value = total_size_mb/1024,
+    number = {'valueformat':'.2f'},
+    mode = "gauge+number",
+    title = {'text': "<b>Project data progress</b><br><span style='color: gray; font-size:0.9em'>#GB of 1TB target</span>", 'font': {"size": 14}},
+    gauge = {'axis': {'range': [None, 1200]},
+            'bar': {'color': "darkblue"},
+            'steps' : [
+                 {'range': [0, 250], 'color': 'red'},
+                 {'range': [250, 500], 'color': "orange"},
+                 {'range': [500, 750], 'color': "yellow"},
+                 {'range': [750, 1000], 'color': "yellowgreen"},
+                 {'range': [1000, 1500], 'color': "green"}],
+            'threshold' : {'line': {'color': "red", 'width': 4}, 'thickness': 0.9, 'value': 1024}}))
 fig1a_1 = px.pie(df, values='size', names=df.index)
 fig1a_2 = px.pie(df, values='size', names='category')
 fig2a_1 = px.bar(df, x=df.index, y='size')
@@ -116,7 +131,9 @@ with row1_1:
         "An open collaboration project to build a data set for Language Modeling with a capacity of at least 1TB comprised of diverse texts in Polish. Our aim is to enable machine learning research and to train a Generative Pre-trained Transformer Model from collected data"
     )
 
-    st.header('Total size: {} GB'.format(total_size_mb/1024))
+    
+    st.plotly_chart(fig1_1, theme="streamlit", use_container_width=True)
+    #st.markdown('Total size: {} GB of 1TB'.format(total_size_mb/1024),)
 
 st.write("")
 
@@ -165,11 +182,11 @@ with line1_1:
 
 
 with line1_2:
+    sl.dat
     if 'selected' in st.session_state:
 
         counter = 0
         random_step = random.randrange(1, 1000)
-        print(random_step)
         txt = ""
         meta = {}
 
@@ -177,7 +194,6 @@ with line1_2:
         for doc in ds:
             txt, meta = doc
             counter += 1
-            print(txt[:10])
             if counter == random_step:
                 break
 
