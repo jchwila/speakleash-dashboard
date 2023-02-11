@@ -25,6 +25,7 @@ avg_words_in_sentence = []
 avg_sents_in_docs = []
 avg_text_dynamics = []
 avg_nouns_to_verbs = []
+avg_stopwords_to_words = []
 
 total_size_mb = 0
 
@@ -53,6 +54,10 @@ for d in sl.datasets:
       avg_nouns_to_verbs.append(d.nouns/d.verbs)
     except:
       avg_nouns_to_verbs.append(None)
+    try: 
+      avg_stopwords_to_words.append(d.stopwords/d.words)
+    except:
+      avg_stopwords_to_words.append(None)
 
 data = {
   "name": name,
@@ -62,7 +67,8 @@ data = {
   "avg sentence length" : avg_words_in_sentence,
   "avg sentences in doc": avg_sents_in_docs,
   "avg text dynamics" : avg_text_dynamics,
-  "avg nouns to verbs" : avg_nouns_to_verbs
+  "avg nouns to verbs" : avg_nouns_to_verbs,
+  "avg stopwords to words": avg_stopwords_to_words
 }
 
 #Using name as indexer for easier navigation
@@ -186,27 +192,26 @@ with line1_2:
     if 'selected' in st.session_state:
 
         counter = 0
-        random_step = random.randrange(1, 1000)
+        random_step = random.randrange(1, 10)
         txt = ""
         meta = {}
 
-        ds = sl.get(st.session_state['selected']).ext_data
+        ds = sl.get(st.session_state['selected']).samples
         for doc in ds:
-            txt, meta = doc
+            txt = doc['text'] 
+            meta = doc['meta']
             counter += 1
             if counter == random_step:
                 break
 
-        st.subheader("Random document (max 100 chars))")
-        st.text_area(txt[:100])
+        st.subheader("Random document (max 200 chars))")
+        st.write(txt[:200])
         st.write(meta)
 
 
-    
-st.write("")
+ 
 
-
-filters = ['size','avg doc length','avg sentence length','avg sentences in doc','avg text dynamics','avg nouns to verbs']
+filters = ['size','avg doc length','avg sentence length','avg sentences in doc','avg text dynamics','avg nouns to verbs','avg stopwords to words']
 with row3_1:
     filter_choice = st.selectbox(
     "Select filter to compare",
@@ -218,6 +223,7 @@ with row3_1:
 with row3_2:
     if 'selected' in st.session_state:
         st.subheader("Selected dataset characteristics")
+        st.write("Metrics compared to average metrics in all datasets (average = 1)")
 
 add_vertical_space()
 
@@ -226,7 +232,7 @@ add_vertical_space()
 with row4_2:
         if 'selected' in st.session_state:
             theta = ['avg doc length','avg sentence length','avg sentences in doc',
-                    'avg text dynamics','avg nouns to verbs']
+                    'avg text dynamics','avg nouns to verbs', 'avg stopwords to words']
             
             #Selected dataset metrics compared to average metrics in all datasets
             r=df[theta].loc[st.session_state['selected']]/(df[theta].sum()/len(sl.datasets))
