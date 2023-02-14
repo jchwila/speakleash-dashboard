@@ -85,8 +85,8 @@ row0_spacer1, row0_1, row0_spacer2, row0_2, row0_spacer3 = st.columns(
 
 row1_spacer1, row1_1, row1_spacer2 = st.columns((0.1, 3.2, 0.1))
 
-row1a_space1, row1a_1, row1a_space2, row1a_2, row1a_space3 = st.columns(
-    (0.1, 1, 0.1, 1, 0.1)
+row1a_1, row1a_2 = st.columns(
+    (1, 1)
 )
 
 row2_spacer1, row2_1, row2_spacer2 = st.columns((0.1, 3.2, 0.1))
