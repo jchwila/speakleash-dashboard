@@ -10,8 +10,12 @@ import random
 
 st.set_page_config(page_title="Speakleash Dashboard", layout="wide")
 
-@st.cache_data
-def prepare_data(_sl):
+@st.cache_data()
+def prepare_data():
+
+  base_dir = os.path.join(os.path.dirname(__file__))
+  replicate_to = os.path.join(base_dir, "datasets")
+  sl = Speakleash(replicate_to)
 
   datasets = []
   size = []
@@ -75,15 +79,11 @@ def prepare_data(_sl):
   #Using name as indexer for easier navigation
   df = pd.DataFrame(data).set_index('name')
 
-  return datasets, df, total_size_mb
+  return sl, datasets, df, total_size_mb
 
 #Init
 
-base_dir = os.path.join(os.path.dirname(__file__))
-replicate_to = os.path.join(base_dir, "datasets")
-sl = Speakleash(replicate_to)
-
-datasets, df, total_size_mb = prepare_data(sl)
+sl, datasets, df, total_size_mb = prepare_data()
 
 
 #Prepare layout
