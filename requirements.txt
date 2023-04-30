@@ -1,7 +1,7 @@
 matplotlib
 streamlit
 numpy
-pandas
+pandas < 2.0.0
 xmltodict
 urllib3
 seaborn
