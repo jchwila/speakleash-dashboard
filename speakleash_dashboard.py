@@ -137,6 +137,8 @@ row0_spacer1, row0_1, row0_spacer2, row0_2, row0_spacer3 = st.columns(
 
 row1_spacer1, row1_1, row1_spacer2 = st.columns((0.1, 3.2, 0.1))
 
+#rowtable, rowtablespacer = st.columns((1, 1))
+
 row1a_1, row1a_2 = st.columns(
     (1, 1)
 )
@@ -222,11 +224,10 @@ with row1_1:
     }
 
     df2 = pd.DataFrame(table_data)
-    
-    st.markdown(
-        '<div class="center">' + df2.to_html(classes='table-responsive', index=False) + '</div>', 
-        unsafe_allow_html=True
-    )
+  
+    table_pane1, table_pane2 = st.columns((1,1))
+    with table_pane1: 
+      st.markdown('<div class="center">' + df2.to_html(classes='table-responsive', index=False) + '</div>',unsafe_allow_html=True)
 
 
     
